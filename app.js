@@ -38,7 +38,7 @@ function ensembleSimulation() {
     var data = google.visualization.arrayToDataTable(ensembleSimulation);
 
     var options = {
-        title: 'Ensamble Simulation — Log Scale',
+        title: 'Ensemble Simulation — Log Scale',
         curveType: 'function',
         width: chartWidth(),
         height: chartHeight(),
