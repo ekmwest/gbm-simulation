@@ -35,22 +35,26 @@
 
         <h2>Explanation</h2>
         <p>An average player will gain 5% wealth for each coin toss: <span class="math">(1.5 + 0.6) / 2 = 1.05</span></p>
-        <p>Here's a simulation of 10 000 players making 10 rounds. Vertical axis displays average wealth:</p>
+        <p>Here's a simulation of 10 000 players making 10 rounds. Vertical axis displays average wealth (log scale)</p>
 
         <div id="ensembleSimulation" class="graph"></div>
 
         <p>However, you're not an average player. You're a single player and will, on average, loose 10% wealth for each coin toss: <span class="math">1.5 * 0.6 = 0.9</span></p>
-        <p>Here's a simulation of a single player making 10 000 rounds. Vertical axis displays wealth:</p>
+        <p>Here's a simulation of a single player making 10 000 rounds. Vertical axis displays wealth (log scale):</p>
 
         <div id="timeSimulation" class="graph"></div>
 
         <h2>What?!</h2>
         <p>The game is non-ergodic. This means that the ensemble average (the averge of many players) is different from the time average (one player over time).</p>
 
+        <h2>Source</h2>
+        <p><a href="https://github.com/ekmwest/gbm-simulation">https://github.com/ekmwest/gbm-simulation</a></p>
+
         <h2>Tell me more!</h2>
         <p>Here's Ole Peters giving a 15 min explanation of non-ergodic processes:<br />
             <a href="https://www.youtube.com/watch?v=LGqOH3sYmQA">https://www.youtube.com/watch?v=LGqOH3sYmQA</a>
         </p>
+
     </main>
 </body>
 
