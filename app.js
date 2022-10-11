@@ -2,8 +2,8 @@ const INITIAL_WEALTH = 1;
 const WEALTH_CHANGE_ON_WIN = 1.5;
 const WEALTH_CHANGE_ON_LOSS = 0.6;
 const TIME_SIMULATION_ROUNDS = 10000;
-const ENSEMBLE_SIMULATION_POPULATION = 10000;
 const ENSEMBLE_SIMULATION_ROUNDS = 10;
+const ENSEMBLE_SIMULATION_POPULATION = 10000;
 
 google.charts.load('current', { 'packages': ['corechart'] });
 window.addEventListener('load', ensembleSimulation);

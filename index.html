@@ -14,46 +14,48 @@
     <main class="main">
         <h1>Geometric Brownian Motion Simulation</h1>
 
-        <h2>Would You Play This Game?</h2>
-        <p>You're offered to play a simple game:
+        <hr>
+
+        <h2>Should you play this game?</h2>
+        <p>Here's a simple game:
         <ol>
             <li>You start with one dollar of wealth.</li>
-            <li>You guess heads or tails.</li>
-            <li>A coin is flipped.</li>
-            <li>If you win, your wealth increases with 50%.</li>
-            <li>If you loose, your wealth decreases with 40%.</li>
-            <li>Repeat 2-5.</li>
+            <li>Guess heads or tails.</li>
+            <li>A coin is tossed.</li>
+            <li>If you win, your wealth increases 50%.</li>
+            <li>If you loose, your wealth decreases 40%.</li>
+            <li>Repeat.</li>
         </ol>
         </p>
-        <p>Seems like a favourably game, right? Would you play it?</p>
+        <p>Seems like a favourably game, right? Should you play it?</p>
 
-        <h2>Answer</h2>
-        <p>No, you should not play this game.</p>
-
-        <h2>Why?</h2>
-        <p>On average, you'll loose.</p>
-
-        <h2>Explanation</h2>
-        <p>An average player will gain 5% wealth for each coin toss: <span class="math">(1.5 + 0.6) / 2 = 1.05</span></p>
-        <p>Here's a simulation of 10 000 players making 10 rounds. Vertical axis displays average wealth (log scale):</p>
+        <h2>Analysis and simulation</h2>
+        <p>An average player should gain 5% wealth for each round (each coin toss):<br /><span class="math">(1.5 + 0.6) / 2 = 1.05</span></p>
+        <p>Let's verify this with a simulation. Here's 10 000 players playing 10 rounds. Vertical axis displays average wealth on log scale. (Reload the page to run the simulation again).</p>
 
         <div id="ensembleSimulation" class="graph"></div>
 
-        <p>However, you're not an average player. You're a single player and will, on average, loose 10% wealth for each coin toss: <span class="math">1.5 * 0.6 = 0.9</span></p>
-        <p>Here's a simulation of a single player making 10 000 rounds. Vertical axis displays wealth (log scale):</p>
+        <p>However, you're not an average player. You're a single player and should, on average, <em>loose</em> 10% wealth for each coin toss:<br /><span class="math">1.5 * 0.6 = 0.9</span></p>
+        <p>Let's verify with a simulation. Here's a single player making 10 000 rounds. Vertical axis displays wealth on log scale. (Reload the page to run the simulation again).</p>
 
         <div id="timeSimulation" class="graph"></div>
 
-        <h2>What?!</h2>
-        <p>The game is non-ergodic. This means that the ensemble average (the average of many players) is different from the time average (the average of many rounds).</p>
+        <h2>Conclusion</h2>
+        <p>You shouldn't play this game. It might seem favourable, and for the ensemble average, it is. But for an individual, the ensemble average is irrelevant.</p>
 
-        <h2>Source</h2>
-        <p><a href="https://github.com/ekmwest/gbm-simulation">https://github.com/ekmwest/gbm-simulation</a></p>
+        <p>When the ensemble average (the average of many players) is different from the time average (the average for one individual over time), the system is said to be <em>non-ergodic</em>.</p>
 
-        <h2>Tell me more!</h2>
-        <p>Here's Ole Peters giving a 15 min explanation:<br />
+        <p>What makes it possible for the ensemble average to increase, is the existence of a few extremely lucky players.</p>
+        
+        <p>Note that, over time, there will always be fewer and fewer lucky players. To successfully simulate the ensemble average over longer periods of time (many more rounds), you must model an infinite number of players.</p>
+
+        <h2>Learn more</h2>
+        <p>Here's Ole Peters explaining ergodicity and geometric brownian motion (15 min):<br />
             <a href="https://www.youtube.com/watch?v=LGqOH3sYmQA">https://www.youtube.com/watch?v=LGqOH3sYmQA</a>
         </p>
+
+        <h2>Simulation Source Code</h2>
+        <p><a href="https://github.com/ekmwest/gbm-simulation">https://github.com/ekmwest/gbm-simulation</a></p>
 
     </main>
 </body>
