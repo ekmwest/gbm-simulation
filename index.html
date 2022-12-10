@@ -11,12 +11,15 @@
 </head>
 
 <body>
-    <main class="main">
-        <h1>Geometric Brownian Motion Simulation</h1>
 
-        <hr>
+    <h1>Geometric Brownian Motion Simulation</h1>
 
-        <h2>Should you play this game?</h2>
+    <img class="gbm-image" src="/gbm.png" />
+
+    <div class="content">
+
+        <h2>A random walk</h2>
+
         <p>Here's a simple game:
         <ol>
             <li>You start with one dollar of wealth.</li>
@@ -26,37 +29,80 @@
             <li>Repeat.</li>
         </ol>
         </p>
-        <p>Seems like a favourably game, right? Should you play it?</p>
+        <p>Let's analyze and simulate this game in some different ways.</p>
 
-        <h2>Analysis and simulation</h2>
-        <p>An average player should gain 5% wealth for each round (each coin toss):<br /><span class="math">(1.5 + 0.6) / 2 = 1.05</span></p>
-        <p>Let's verify this with a simulation. Here's 10 000 players playing 10 rounds. Vertical axis displays average wealth on log scale. (Reload the page to run the simulation again).</p>
+
+
+        <h2>Analysis and simulations</h2>
+
+        <h3>Enseble average</h3>
+
+        <p>The average player will gain 5% wealth on each round (each coin toss):<br /><span class="math">EA = (1.5 + 0.6) / 2 = 1.05</span></p>
+
+        <p>Let's simulate the average player. Here we use 10,000 players (an enseble) and run the game for 10 rounds. The vertical axis shows average wealth on a log scale:</p>
 
         <div id="ensembleSimulation" class="graph"></div>
 
-        <p>However, you're not an average player. You're a single player and should, on average, <em>loose</em> 10% wealth for each coin toss:<br /><span class="math">1.5 * 0.6 = 0.9</span></p>
-        <p>Let's verify with a simulation. Here's a single player making 10 000 rounds. Vertical axis displays wealth on log scale. (Reload the page to run the simulation again).</p>
+        <button type="button" name="btnEnsebleSimulation">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <span>New Simulation</span>
+        </button>
+
+
+
+        <h3>Time average</h3>
+
+        <p>If you were to participate in the game, you wouldn't be an average player. You would be an individual player and should, on average, <em>loose</em> 5% wealth on each round:<br /><span class="math">TA = (1.5 * 0.6) / 2 = 0.95</span></p>
+
+        <p>Let's simulatate an individual player. Here we use a single player and run the game for 10,000 rounds. The vertical axis shows wealth on a log scale:</p>
 
         <div id="timeSimulation" class="graph"></div>
 
+        <button type="button" name="btnTimeSimulation">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <span>New Simulation</span>
+        </button>
+
+
+
         <h2>Conclusion</h2>
-        <p>You shouldn't play this game. It might seem favourable, and for the ensemble average, it is. But for an individual, the ensemble average is irrelevant.</p>
 
-        <p>When the ensemble average (the average of many players) is different from the time average (the average for one individual over time), the system is said to be <em>non-ergodic</em>.</p>
+        <p>Because the ensemble average is not equal to the time average, the game is <em>non-ergodic</em>. The game might seem favourable at first, and for the average player, it is. But for an individual, the ensemble average is irrelevant. It would be irrational to participate in the game.</p>
 
-        <p>What makes it possible for the ensemble average to increase, is the existence of a few extremely lucky players.</p>
-        
-        <p>Note that, over time, there will always be fewer and fewer lucky players. To successfully simulate the ensemble average over longer periods of time (many more rounds), you must model an infinite number of players.</p>
 
-        <h2>Learn more</h2>
-        <p>Here's Ole Peters explaining ergodicity and geometric brownian motion (15 min):<br />
-            <a href="https://www.youtube.com/watch?v=LGqOH3sYmQA">https://www.youtube.com/watch?v=LGqOH3sYmQA</a>
+
+        <h2>The Kelly Fraction</h2>
+
+        <p>Let's slightly modify the game so that a player can choose the amount to bet on each round. In this new scenario, it's actually possible for an individual player to "get access" to some of the ensemble gains. The optimal amount to bet can be calculated by the Kelly Fraction:<br /><span class="math">KF = P/A - Q/B</span></p>
+
+        <p><strong>P</strong> = Probabilty of win<br /><strong>Q</strong> = Probability of loss<br /><strong>A</strong> = Fraction lost on loss<br /><strong>B</strong> = Fraction gained on win</p>
+
+        <p>For our game, the Kelly Fraction is:<br /><span class="math">KF = 0.5/0.4 - 0.5/0.5 = 0.25</span></p>
+
+        <p>Let's run the time average simulation again, but this time using the Kelly Fraction. Here we use a single player making a 25% bet on 10,000 rounds. The vertical axis shows wealth on log scale:</p>
+
+        <div id="kellySimulation" class="graph"></div>
+
+        <button type="button" name="btnKellySimulation">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            <span>New Simulation</span>
+        </button>
+
+
+
+        <h2>Simulation Code</h2>
+
+        <p>The simulation code is published here:<br />
+            <a href="https://github.com/ekmwest/gbm-simulation/blob/main/app.js">https://github.com/ekmwest/gbm-simulation/blob/main/app.js</a>
         </p>
 
-        <h2>Simulation Source Code</h2>
-        <p><a href="https://github.com/ekmwest/gbm-simulation">https://github.com/ekmwest/gbm-simulation</a></p>
-
-    </main>
+    </div>
 </body>
 
 </html>

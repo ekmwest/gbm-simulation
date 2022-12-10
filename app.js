@@ -4,10 +4,8 @@ const WEALTH_CHANGE_ON_LOSS = 0.6;
 const TIME_SIMULATION_ROUNDS = 10000;
 const ENSEMBLE_SIMULATION_ROUNDS = 10;
 const ENSEMBLE_SIMULATION_POPULATION = 10000;
+const KELLY_BET = 0.25;
 
-google.charts.load('current', { 'packages': ['corechart'] });
-window.addEventListener('load', ensembleSimulation);
-window.addEventListener('load', timeSimulation);
 
 function ensembleSimulation() {
     const ensembleSimulationRawData = [];
@@ -23,7 +21,7 @@ function ensembleSimulation() {
 
     const ensembleSimulation = [];
 
-    // Calculate averages
+    // Calculate Averages
     for (let r = 0; r <= ENSEMBLE_SIMULATION_ROUNDS; r++) {
         let totalWealth = 0;
         for (let p = 0; p < ENSEMBLE_SIMULATION_POPULATION; p++) {
@@ -33,32 +31,15 @@ function ensembleSimulation() {
         ensembleSimulation.push([r, averageWealth]);
     }
 
-    ensembleSimulation.unshift(['Round', 'Wealth']); // Add labels
+    ensembleSimulation.unshift(['Round', 'Wealth']); // Labels
 
-    var data = google.visualization.arrayToDataTable(ensembleSimulation);
-
-    var options = {
-        title: 'Ensemble Simulation — Log Scale',
-        curveType: 'function',
-        width: chartWidth(),
-        height: chartHeight(),
-        legend: 'none',
-        chartArea: { 'width': '100%', 'height': '80%' },
-        hAxis: {
-            title: 'Round'
-        },
-        vAxis: {
-            title: null,
-            textPosition: 'none',
-            scaleType: 'log',
-            ticks: [1, 2]
-        }
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('ensembleSimulation'));
+    const data = google.visualization.arrayToDataTable(ensembleSimulation);
+    const options = createChartOptions('Ensemble Average Simulation — Log Scale', [1, 2])
+    const chart = new google.visualization.LineChart(document.getElementById('ensembleSimulation'));
 
     chart.draw(data, options);
 }
+
 
 function timeSimulation() {
     const timeSimulation = createTimeSerie(
@@ -68,13 +49,76 @@ function timeSimulation() {
         WEALTH_CHANGE_ON_LOSS
     );
 
-    timeSimulation.unshift(['Round', 'Wealth']); // Add labels
+    timeSimulation.unshift(['Round', 'Wealth']); // Labels
 
-    var data = google.visualization.arrayToDataTable(timeSimulation);
+    const data = google.visualization.arrayToDataTable(timeSimulation);
+    const options = createChartOptions('Time Average Simulation — Log Scale', [0, 1])
+    const chart = new google.visualization.LineChart(document.getElementById('timeSimulation'));
 
-    var options = {
-        title: 'Time Simulation — Log Scale',
+    chart.draw(data, options);
+}
+
+
+function kellySimulation() {
+    const timeSimulation = createTimeSerie(
+        INITIAL_WEALTH,
+        TIME_SIMULATION_ROUNDS,
+        WEALTH_CHANGE_ON_WIN,
+        WEALTH_CHANGE_ON_LOSS,
+        KELLY_BET
+    );
+
+    timeSimulation.unshift(['Round', 'Wealth']); // Labels
+
+    const data = google.visualization.arrayToDataTable(timeSimulation);
+    const options = createChartOptions('Kelly Fraction Simulation — Log Scale', [0, 1])
+    const chart = new google.visualization.LineChart(document.getElementById('kellySimulation'));
+
+    chart.draw(data, options);
+}
+
+
+function createTimeSerie(startValue, rounds, changeOnWin, changeOnLoss, bet = 1) {
+    const timeSerie = [[0, startValue]]; // Initial Data Point
+
+    for (let i = 1; i <= rounds; i++) {
+        const wealthFromPreviousRound = timeSerie[i - 1][1];
+
+        if (Math.random() < 0.5) {
+            timeSerie.push([i, wealthFromPreviousRound * bet * changeOnWin + wealthFromPreviousRound * (1 - bet)]);
+        } else {
+            timeSerie.push([i, wealthFromPreviousRound * bet * changeOnLoss + wealthFromPreviousRound * (1 - bet)]);
+        }
+    }
+
+    return timeSerie;
+}
+
+
+google.charts.load('current', { 'packages': ['corechart'] });
+window.addEventListener('load', ensembleSimulation);
+window.addEventListener('load', timeSimulation);
+window.addEventListener('load', kellySimulation);
+document.addEventListener('click', event => {
+    switch (event.target.name) {
+        case 'btnEnsebleSimulation':
+            ensembleSimulation();
+            break;
+        case 'btnTimeSimulation':
+            timeSimulation();
+            break;
+        case 'btnKellySimulation':
+            kellySimulation();
+            break;
+    }
+})
+
+
+function createChartOptions(title, ticks) {
+    return {
+        title: title,
         curveType: 'function',
+        colors: ['#1d77f4'],
         width: chartWidth(),
         height: chartHeight(),
         legend: 'none',
@@ -86,40 +130,24 @@ function timeSimulation() {
             title: null,
             textPosition: 'none',
             scaleType: 'log',
-            ticks: [0, 1]
+            ticks: ticks
         }
     };
-
-    var chart = new google.visualization.LineChart(document.getElementById('timeSimulation'));
-
-    chart.draw(data, options);
 }
 
-function createTimeSerie(startValue, rounds, changeOnWin, changeOnLoss) {
-    // Initial Data Point
-    const timeSerie = [[0, startValue]];
-
-    for (let i = 1; i <= rounds; i++) {
-        if (Math.random() < 0.5) {
-            timeSerie.push([i, timeSerie[i - 1][1] * changeOnWin]);
-        } else {
-            timeSerie.push([i, timeSerie[i - 1][1] * changeOnLoss]);
-        }
-    }
-
-    return timeSerie;
-}
 
 function chartWidth() {
+    const padding = 16;
     const bodyClientWidth = document.body.clientWidth;
 
     if (bodyClientWidth > 768) {
-        return 768;
+        return 768 - 2 * padding;
     } else {
-        return bodyClientWidth;
+        return bodyClientWidth - 2 * padding;
     }
 }
 
+
 function chartHeight() {
-    return chartWidth() * 0.3;
+    return chartWidth() * 0.4;
 }
