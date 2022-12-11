@@ -8,7 +8,7 @@ h1 {
     text-align: center;
     margin: 1em auto .6em;
     line-height: 1.1;
-    color: #006afc;
+    color: #006bff;
     font-size: 2.5em;
 }
 
@@ -60,13 +60,14 @@ p {
 .graph {
     margin: 1em auto .8em;
     background-color: #fff;
-    padding: 8px 16px 2px;
+    padding: 8px 16px 1px;
     border-radius: 4px;
 }
 
 button {
-    background-color: #fff;
     background-color: #1d77f4;
+    background-color: rgba(29, 119, 244, 1);
+    background-color: hsla(215 91% 54%);
     color: #fff;
     border: none;
     padding: 8px 14px;
@@ -78,6 +79,15 @@ button {
     border-radius: 2em;
     font: inherit;
     font-size: .8em;
+    transition: background-color .08s;
+}
+
+button:hover {
+    background-color: hsla(215 91% 50%);
+}
+
+button:active {
+    background-color: hsla(215 91% 45%);
 }
 
 button svg {

@@ -1,66 +1,77 @@
+/*  =====================================================================
+    Constants
+    ===================================================================== */
+
 const INITIAL_WEALTH = 1;
+
+const PROBABILITY_OF_WIN = 0.5;
+
 const WEALTH_CHANGE_ON_WIN = 1.5;
 const WEALTH_CHANGE_ON_LOSS = 0.6;
-const TIME_SIMULATION_ROUNDS = 10000;
+
 const ENSEMBLE_SIMULATION_ROUNDS = 10;
 const ENSEMBLE_SIMULATION_POPULATION = 10000;
-const KELLY_BET = 0.25;
 
+const TIME_SIMULATION_ROUNDS = 10000;
+
+const KELLY_BET = PROBABILITY_OF_WIN / (1 - WEALTH_CHANGE_ON_LOSS) - (1 - PROBABILITY_OF_WIN) / (WEALTH_CHANGE_ON_WIN - 1);
+
+
+
+/*  =====================================================================
+    Simulations
+    ===================================================================== */
 
 function ensembleSimulation() {
-    const ensembleSimulationRawData = [];
+
+    // 1. Run Ensemble Simulations
+
+    const ensembleSimulations = [];
 
     for (let i = 0; i < ENSEMBLE_SIMULATION_POPULATION; i++) {
-        ensembleSimulationRawData.push(createTimeSerie(
-            INITIAL_WEALTH,
-            ENSEMBLE_SIMULATION_ROUNDS,
-            WEALTH_CHANGE_ON_WIN,
-            WEALTH_CHANGE_ON_LOSS
-        ));
+        ensembleSimulations.push(
+            simulateBrownianMotion(
+                INITIAL_WEALTH,
+                ENSEMBLE_SIMULATION_ROUNDS,
+                WEALTH_CHANGE_ON_WIN,
+                WEALTH_CHANGE_ON_LOSS
+            ));
     }
 
-    const ensembleSimulation = [];
+    // 2. Compute Ensemble Average
 
-    // Calculate Averages
+    const ensembleAverage = [];
+
     for (let r = 0; r <= ENSEMBLE_SIMULATION_ROUNDS; r++) {
         let totalWealth = 0;
+
         for (let p = 0; p < ENSEMBLE_SIMULATION_POPULATION; p++) {
-            totalWealth += ensembleSimulationRawData[p][r][1];
+            totalWealth += ensembleSimulations[p][r][1];
         }
+
         const averageWealth = totalWealth / ENSEMBLE_SIMULATION_POPULATION;
-        ensembleSimulation.push([r, averageWealth]);
+
+        ensembleAverage.push([r, averageWealth]);
     }
 
-    ensembleSimulation.unshift(['Round', 'Wealth']); // Labels
-
-    const data = google.visualization.arrayToDataTable(ensembleSimulation);
-    const options = createChartOptions('Ensemble Average Simulation — Log Scale', [1, 2])
-    const chart = new google.visualization.LineChart(document.getElementById('ensembleSimulation'));
-
-    chart.draw(data, options);
+    return ensembleAverage;
 }
 
 
 function timeSimulation() {
-    const timeSimulation = createTimeSerie(
+    const timeSimulation = simulateBrownianMotion(
         INITIAL_WEALTH,
         TIME_SIMULATION_ROUNDS,
         WEALTH_CHANGE_ON_WIN,
         WEALTH_CHANGE_ON_LOSS
     );
 
-    timeSimulation.unshift(['Round', 'Wealth']); // Labels
-
-    const data = google.visualization.arrayToDataTable(timeSimulation);
-    const options = createChartOptions('Time Average Simulation — Log Scale', [0, 1])
-    const chart = new google.visualization.LineChart(document.getElementById('timeSimulation'));
-
-    chart.draw(data, options);
+    return timeSimulation;
 }
 
 
 function kellySimulation() {
-    const timeSimulation = createTimeSerie(
+    const kellySimulation = simulateBrownianMotion(
         INITIAL_WEALTH,
         TIME_SIMULATION_ROUNDS,
         WEALTH_CHANGE_ON_WIN,
@@ -68,51 +79,79 @@ function kellySimulation() {
         KELLY_BET
     );
 
-    timeSimulation.unshift(['Round', 'Wealth']); // Labels
-
-    const data = google.visualization.arrayToDataTable(timeSimulation);
-    const options = createChartOptions('Kelly Fraction Simulation — Log Scale', [0, 1])
-    const chart = new google.visualization.LineChart(document.getElementById('kellySimulation'));
-
-    chart.draw(data, options);
+    return kellySimulation;
 }
 
 
-function createTimeSerie(startValue, rounds, changeOnWin, changeOnLoss, bet = 1) {
-    const timeSerie = [[0, startValue]]; // Initial Data Point
+
+/*  =====================================================================
+    Simulate Brownian Motion
+    ===================================================================== */
+
+function simulateBrownianMotion(startValue, rounds, changeOnWin, changeOnLoss, bet = 1) {
+    const randomWalk = [[0, startValue]]; // Initial Data Point
 
     for (let i = 1; i <= rounds; i++) {
-        const wealthFromPreviousRound = timeSerie[i - 1][1];
+        const valueFromPreviousRound = randomWalk[i - 1][1];
 
         if (Math.random() < 0.5) {
-            timeSerie.push([i, wealthFromPreviousRound * bet * changeOnWin + wealthFromPreviousRound * (1 - bet)]);
+            randomWalk.push([i, valueFromPreviousRound * bet * changeOnWin + valueFromPreviousRound * (1 - bet)]);
         } else {
-            timeSerie.push([i, wealthFromPreviousRound * bet * changeOnLoss + wealthFromPreviousRound * (1 - bet)]);
+            randomWalk.push([i, valueFromPreviousRound * bet * changeOnLoss + valueFromPreviousRound * (1 - bet)]);
         }
     }
 
-    return timeSerie;
+    return randomWalk;
 }
 
 
-google.charts.load('current', { 'packages': ['corechart'] });
-window.addEventListener('load', ensembleSimulation);
-window.addEventListener('load', timeSimulation);
-window.addEventListener('load', kellySimulation);
-document.addEventListener('click', event => {
-    switch (event.target.name) {
-        case 'btnEnsebleSimulation':
-            ensembleSimulation();
-            break;
-        case 'btnTimeSimulation':
-            timeSimulation();
-            break;
-        case 'btnKellySimulation':
-            kellySimulation();
-            break;
-    }
-})
 
+/*  =====================================================================
+    Render Simulations
+    ===================================================================== */
+
+function renderEnsembleSimulation() {
+    const simulationData = ensembleSimulation();
+
+    simulationData.unshift(['Round', 'Wealth']); // Labels
+
+    const chartData = google.visualization.arrayToDataTable(simulationData);
+    const chartOtions = createChartOptions('Ensemble Average Simulation — Log Scale', [1, 2])
+    const chart = new google.visualization.LineChart(document.getElementById('ensembleSimulation'));
+
+    chart.draw(chartData, chartOtions);
+}
+
+
+function renderTimeSimulation() {
+    const simulationData = timeSimulation();
+
+    simulationData.unshift(['Round', 'Wealth']); // Labels
+
+    const chartData = google.visualization.arrayToDataTable(simulationData);
+    const chartOtions = createChartOptions('Time Average Simulation — Log Scale', [0, 1])
+    const chart = new google.visualization.LineChart(document.getElementById('timeSimulation'));
+
+    chart.draw(chartData, chartOtions);
+}
+
+
+function renderKellySimulation() {
+    const simulationData = kellySimulation();
+
+    simulationData.unshift(['Round', 'Wealth']); // Labels
+
+    const chartData = google.visualization.arrayToDataTable(simulationData);
+    const chartOtions = createChartOptions('Kelly Fraction Simulation — Log Scale', [0, 1])
+    const chart = new google.visualization.LineChart(document.getElementById('kellySimulation'));
+
+    chart.draw(chartData, chartOtions);
+}
+
+
+/*  =====================================================================
+    Chart Helpers
+    ===================================================================== */
 
 function createChartOptions(title, ticks) {
     return {
@@ -124,7 +163,7 @@ function createChartOptions(title, ticks) {
         legend: 'none',
         chartArea: { 'width': '100%', 'height': '80%' },
         hAxis: {
-            title: 'Round'
+            title: null
         },
         vAxis: {
             title: null,
@@ -151,3 +190,35 @@ function chartWidth() {
 function chartHeight() {
     return chartWidth() * 0.4;
 }
+
+
+
+/*  =====================================================================
+    Event Handlers
+    ===================================================================== */
+
+window.addEventListener('load', renderEnsembleSimulation);
+window.addEventListener('load', renderTimeSimulation);
+window.addEventListener('load', renderKellySimulation);
+
+document.addEventListener('click', event => {
+    switch (event.target.name) {
+        case 'btnEnsebleSimulation':
+            renderEnsembleSimulation();
+            break;
+        case 'btnTimeSimulation':
+            renderTimeSimulation();
+            break;
+        case 'btnKellySimulation':
+            renderKellySimulation();
+            break;
+    }
+});
+
+
+
+/*  =====================================================================
+    Load Chart Library
+    ===================================================================== */
+
+google.charts.load('current', { 'packages': ['corechart'] });

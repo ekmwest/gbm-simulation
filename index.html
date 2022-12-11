@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>GBM Simulation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/app.js"></script>
     <link rel="stylesheet" href="/style.css" />
 </head>
@@ -13,23 +13,27 @@
 <body>
 
     <h1>Geometric Brownian Motion Simulation</h1>
+    <img class="gbm-image" src="/gbm.png" alt="Geometric Brownian Motion" />
 
-    <img class="gbm-image" src="/gbm.png" />
 
     <div class="content">
 
-        <h2>A random walk</h2>
+
+
+        <h2>Brownian Motion</h2>
 
         <p>Here's a simple game:
         <ol>
-            <li>You start with one dollar of wealth.</li>
+            <li>You have some amount of wealth.</li>
             <li>A fair coin is tossed.</li>
             <li>On heads, your wealth increases 50%.</li>
             <li>On tails, your wealth decreases 40%.</li>
-            <li>Repeat.</li>
         </ol>
         </p>
-        <p>Let's analyze and simulate this game in some different ways.</p>
+
+        <p>If we play this game repeatedly many times, our wealth will obviously change randomly. But how, exactly, will it randomly change?</p>
+
+        <p>This type of dynamic change is called a "<em>random walk</em>" or more specifically, a "<em>brownian motion</em>". Let's analyze and simulate this brownian motion in some different ways!</p>
 
 
 
@@ -44,34 +48,34 @@
         <div id="ensembleSimulation" class="graph"></div>
 
         <button type="button" name="btnEnsebleSimulation">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
-            <span>New Simulation</span>
+            <span>Run Simulation Again</span>
         </button>
 
 
 
         <h3>Time average</h3>
 
-        <p>If you were to participate in the game, you wouldn't be an average player. You would be an individual player and should, on average, <em>loose</em> 5% wealth on each round:<br /><span class="math">TA = (1.5 * 0.6) / 2 = 0.95</span></p>
+        <p>If you would participate in the game, you wouldn't be an average player. You would be an individual player and should, on average, <em>loose</em> 5% wealth on each round:<br /><span class="math">TA = (1.5 * 0.6) / 2 = 0.95</span></p>
 
         <p>Let's simulatate an individual player. Here we use a single player and run the game for 10,000 rounds. The vertical axis shows wealth on a log scale:</p>
 
         <div id="timeSimulation" class="graph"></div>
 
         <button type="button" name="btnTimeSimulation">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
-            <span>New Simulation</span>
+            <span>Run Simulation Again</span>
         </button>
 
 
 
         <h2>Conclusion</h2>
 
-        <p>Because the ensemble average is not equal to the time average, the game is <em>non-ergodic</em>. The game might seem favourable at first, and for the average player, it is. But for an individual, the ensemble average is irrelevant. It would be irrational to participate in the game.</p>
+        <p>Because the ensemble average is not equal to the time average, the game is <em>non-ergodic</em>. The game might seem favourable at first, and for the average player, it is. But for an individual, the ensemble average is irrelevant. It wouldn't be rational to participate.</p>
 
 
 
@@ -83,15 +87,15 @@
 
         <p>For our game, the Kelly Fraction is:<br /><span class="math">KF = 0.5/0.4 - 0.5/0.5 = 0.25</span></p>
 
-        <p>Let's run the time average simulation again, but this time using the Kelly Fraction. Here we use a single player making a 25% bet on 10,000 rounds. The vertical axis shows wealth on log scale:</p>
+        <p>Let's run the time average simulation again, but this time using the Kelly Fraction. Here we use a single player making a 25% bet in 10,000 rounds. The vertical axis shows wealth on log scale:</p>
 
         <div id="kellySimulation" class="graph"></div>
 
         <button type="button" name="btnKellySimulation">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
             </svg>
-            <span>New Simulation</span>
+            <span>Run Simulation Again</span>
         </button>
 
 
