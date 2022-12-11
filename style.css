@@ -100,3 +100,8 @@ button span {
     line-height: 1.3;
     font-weight: 600;
 }
+
+a,
+a:visited {
+    color: #006bff;
+}
