@@ -41,9 +41,9 @@
 
         <h3>Enseble average</h3>
 
-        <p>The average player will gain 5% wealth on each round (each coin toss):<br /><span class="math">EA = (1.5 + 0.6) / 2 = 1.05</span></p>
+        <p>An average player will gain 5% wealth on each round (each coin toss):<br /><span class="math">EA = (1.5 + 0.6) / 2 = 1.05</span></p>
 
-        <p>Let's simulate the average player. Here we use 10,000 players (an enseble) and run the game for 10 rounds. The vertical axis shows average wealth on a log scale:</p>
+        <p>Let's simulate an average player. Here we use 10,000 players (an enseble) and run the game for 10 rounds. The vertical axis shows average wealth on a log scale:</p>
 
         <div id="ensembleSimulation" class="graph"></div>
 
@@ -58,9 +58,9 @@
 
         <h3>Time average</h3>
 
-        <p>If you would participate in the game, you wouldn't be an average player. You would be an individual player and should, on average, <em>loose</em> 5% wealth on each round:<br /><span class="math">TA = (1.5 * 0.6) / 2 = 0.95</span></p>
+        <p>If you would participate in the game, you wouldn't be an average player. You would be an <em>individual</em> player and should, on average, <em>loose</em> 5% wealth on each round:<br /><span class="math">TA = (1.5 * 0.6) / 2 = 0.95</span></p>
 
-        <p>Let's simulatate an individual player. Here we use a single player and run the game for 10,000 rounds. The vertical axis shows wealth on a log scale:</p>
+        <p>Let's simulatate an individual player. Here we use one single player and run the game 10,000 rounds. The vertical axis shows wealth on a log scale:</p>
 
         <div id="timeSimulation" class="graph"></div>
 
@@ -75,13 +75,13 @@
 
         <h2>Conclusion</h2>
 
-        <p>Because the ensemble average is not equal to the time average, the game is <em>non-ergodic</em>. The game might seem favourable at first, and for the average player, it is. But for an individual, the ensemble average is irrelevant. It wouldn't be rational to participate.</p>
+        <p>Because the ensemble average is not equal to the time average, the game is <em>non-ergodic</em>. The game might seem favourable at first, and for the average player, it is. But for an individual player, the ensemble average is not relevant. It wouldn't be rational to participate.</p>
 
 
 
         <h2>The Kelly Fraction</h2>
 
-        <p>Let's slightly modify the game so that a player can choose the amount to bet on each round. In this new scenario, it's actually possible for an individual player to "get access" to some of the ensemble gains. The optimal amount to bet can be calculated by the Kelly Fraction:<br /><span class="math">KF = P/A - Q/B</span></p>
+        <p>Let's slightly modify the game so that a player can choose the amount to bet on each round. In this new scenario, it's in fact possible for an individual player to "get access" to some of the ensemble gains. The optimal amount to bet is calculated by the Kelly Fraction:<br /><span class="math">KF = P/A - Q/B</span></p>
 
         <p><strong>P</strong> = Probabilty of win<br /><strong>Q</strong> = Probability of loss<br /><strong>A</strong> = Fraction lost on loss<br /><strong>B</strong> = Fraction gained on win</p>
 
